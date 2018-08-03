@@ -1,5 +1,3 @@
-# Blastwave
-
----
+# Blastwave &middot; [![Build Status](https://travis-ci.org/0exp/blastwave.svg?branch=master)](https://travis-ci.org/0exp/blastwave)
 
 In active development...
