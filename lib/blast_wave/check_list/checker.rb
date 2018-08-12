@@ -3,13 +3,13 @@
 module Rack
   # @api private
   # @since 0.1.0
-  class BlastWave::WhiteList::Checker
+  class BlastWave::CheckList::Checker
     # @return [void]
     #
     # @api private
     # @since 0.1.0
     def initialize
-      @matcher_registry = BlastWave::WhiteList::MatcherRegistry.new
+      @matcher_registry = BlastWave::CheckList::MatcherRegistry.new
     end
 
     # @param request [Rack::Request]
@@ -28,12 +28,12 @@ module Rack
     # @api private
     # @since 0.1.0
     def register(&block)
-      matcher_registry.register(BlastWave::WhiteList::Matcher.new(block))
+      matcher_registry.register(BlastWave::CheckList::Matcher.new(block))
     end
 
     private
 
-    # @return [BlastWave::WhiteList::MatcherRegistry]
+    # @return [BlastWave::CheckList::MatcherRegistry]
     #
     # @api private
     # @since 0.1.0

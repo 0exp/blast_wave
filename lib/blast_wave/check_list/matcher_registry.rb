@@ -3,7 +3,7 @@
 module Rack
   # @api private
   # @since 0.1.0
-  class BlastWave::WhiteList::MatcherRegistry
+  class BlastWave::CheckList::MatcherRegistry
     # @since 0.1.0
     include Enumerable
 
@@ -16,7 +16,7 @@ module Rack
       @lock = Mutex.new
     end
 
-    # @param matcher [BlastWave::WhiteList::Matcher]
+    # @param matcher [BlastWave::CheckList::Matcher]
     # @return [void]
     #
     # @api private

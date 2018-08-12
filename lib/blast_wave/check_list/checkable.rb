@@ -3,7 +3,7 @@
 module Rack
   # @api private
   # @since 0.1.0
-  module BlastWave::WhiteList::Checkable
+  module BlastWave::CheckList::Checkable
     class << self
       # @param base_klass [Class]
       # @return [void]
@@ -13,7 +13,7 @@ module Rack
       def included(base_klass)
         base_klass.extend(ClassMethods)
         base_klass.include(InstanceMethods)
-        base_klass.instance_variable_set(:@checker, BlastWave::WhiteList::Checker.new)
+        base_klass.instance_variable_set(:@checker, BlastWave::CheckList::Checker.new)
         base_klass.singleton_class.class_eval { attr_reader :checker }
       end
     end
@@ -34,7 +34,7 @@ module Rack
     # @api private
     # @since 0.1.0
     module InstanceMethods
-      # @return [BlastWave::WhiteList::Checker]
+      # @return [BlastWave::CheckLis::Checker]
       #
       # @api private
       # @sicne 0.1.0

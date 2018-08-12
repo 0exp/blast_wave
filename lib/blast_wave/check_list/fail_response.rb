@@ -3,7 +3,7 @@
 module Rack
   # @api private
   # @since 0.1.0
-  class BlastWave::WhiteList::FailResponse < Rack::Response
+  class BlastWave::CheckList::FailResponse < Rack::Response
     # @return [Array<String>]
     #
     # @api private

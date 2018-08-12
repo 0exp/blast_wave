@@ -3,7 +3,7 @@
 module Rack
   # @api private
   # @since 0.1.0
-  class BlastWave::WhiteList::Matcher
+  class BlastWave::CheckList::Matcher
     # @return [Object] #call-able object
     #
     # @api private

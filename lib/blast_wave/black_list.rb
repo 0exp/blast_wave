@@ -3,7 +3,7 @@
 module Rack
   # @api public
   # @since 0.1.0
-  class BlastWave::WhiteList < BlastWave::CheckList
+  class BlastWave::BlackList < BlastWave::CheckList
     BlastWave::CheckList::Builder.build(self)
 
     # @param env [Hash]
@@ -12,7 +12,7 @@ module Rack
     # @api private
     # @since 0.1.0
     def call(env)
-      check!(env) ? super : generate_fail_response!
+      check!(env) ? generate_fail_response! : super
     end
   end
 end
