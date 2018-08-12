@@ -11,7 +11,8 @@ module Rack
     require_relative 'blast_wave/version'
     require_relative 'blast_wave/middleware'
     require_relative 'blast_wave/request_id'
-    require_relative 'blast_wave/request_id/extensions/request_interface'
-    require_relative 'blast_wave/request_id/initializer'
+    require_relative 'blast_wave/check_list'
+    require_relative 'blast_wave/white_list'
+    require_relative 'blast_wave/black_list'
   end
 end

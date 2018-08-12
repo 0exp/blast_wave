@@ -4,6 +4,9 @@ module Rack
   # @api public
   # @since 0.1.0
   class BlastWave::RequestId < BlastWave::Middleware
+    require_relative 'request_id/extensions/request_interface'
+    require_relative 'request_id/initializer'
+
     # @since 0.1.0
     include Qonfig::Configurable
 
