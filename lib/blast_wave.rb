@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'rack'
-require 'rack/test'
 require 'securerandom'
 require 'qonfig'
 

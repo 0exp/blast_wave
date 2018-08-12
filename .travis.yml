@@ -14,7 +14,8 @@ matrix:
     - rvm: ruby-head
     - rvm: jruby-head
 script:
-- bundle exec rspec
+  - bundle exec rubocop
+  - bundle exec rspec
 notifications:
   slack:
     secure: Q+ekBKUsaRXWKg1nEDdfFT7o8ol22IKhVEAmcQgQeL9s2qDafs/0FZvsPj/UYjNIeX7zqRe1jTQv/P+9rbDzOLtZSG3z5PG2iWrPpOdBzPeoxdTboqsFbC57gsCB6YjZwV6tw7xDC3AudJUZQjEtoZkhhf5R3D8aK+x/ujuaT2xG5sR1ZGcH2vIjP47GLdaLfyBMlg2FYxG3UlWOsb7nCSdwVi1Ez1GW7cWAYaE9lYRCiy/vL8rOzDwbDXEOdDGjTnKqW76c95c983tEBCA3NJt3P3n/azCapnANgdHROcAxy0/9JwJ2iFvaRm+7Fm8EtQvsvzOAf5GdUi5xQ9RrdVUzh8SeUh9o5U14XNOjPy1QgA0IlXJSLJrDbdTgnSBa35EWxkLv35PDboAzbAbSrMG3Xsk8vxzZLLoMP8EKqWXjjX7WxUTPCyGL0Pxrp3ZMIqhoPcI4qsDUQo3rQSp8ITO3rqGQYLsuRlN3lEKz697D6I6y6sd2drmKUe30N/A5vauf8JDUPs/4IDwzG5+qlN+E2O9pZQR+oSeKB70pjb2yIOyVlRbP3mJuHdnvwjwJzwBN/d8TZr4v0rXOGSyZq4eTah75xlzKpQcq1fZltco2vDM9gQHyj7iT6i/puXtfjCPheFGIM0N7/4j0dukYliUD8qmgTZWsoeuh1mC2PCQ=

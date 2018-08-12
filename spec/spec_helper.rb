@@ -12,6 +12,7 @@ SimpleCov.start { add_filter 'spec' }
 
 require 'bundler/setup'
 require 'blast_wave'
+require 'rack/test'
 require 'pry'
 
 require_relative 'support/fake_app'
