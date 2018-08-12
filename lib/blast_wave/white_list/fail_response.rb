@@ -30,7 +30,7 @@ module Rack
       #
       # @api private
       # @since 0.1.0
-      def build(status: DEFAULT_STATUS, body: DEFAULT_BODY, heders: DEFAULT_HEADERS)
+      def build(status: DEFAULT_STATUS, body: DEFAULT_BODY, headers: DEFAULT_HEADERS)
         new(body, status, headers)
       end
     end

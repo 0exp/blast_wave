@@ -3,7 +3,7 @@
 module Rack
   # @api private
   # @since 0.1.0
-  class BlastWave::WhiteList::MatcherList
+  class BlastWave::WhiteList::MatcherRegistry
     # @since 0.1.0
     include Enumerable
 
@@ -22,7 +22,7 @@ module Rack
     # @api private
     # @since 0.1.0
     def register(matcher)
-      lock.synchronize { list.add(matcher) }
+      lock.synchronize { list << matcher }
     end
 
     # @param block [Proc]
@@ -46,6 +46,6 @@ module Rack
     #
     # @api private
     # @since 0.1.0
-    attr_reader :registration_lock
+    attr_reader :lock
   end
 end

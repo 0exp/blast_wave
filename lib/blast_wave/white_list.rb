@@ -5,7 +5,7 @@ module Rack
   # @since 0.1.0
   class BlastWave::WhiteList < BlastWave::Middleware
     require_relative 'white_list/matcher'
-    require_relative 'white_list/matcher_list'
+    require_relative 'white_list/matcher_registry'
     require_relative 'white_list/checker'
     require_relative 'white_list/fail_response'
     require_relative 'white_list/checkable'
@@ -19,7 +19,7 @@ module Rack
     configuration do
       setting :check_all, false
 
-      setting :fail_reponse do
+      setting :fail_response do
         setting :body,    FailResponse::DEFAULT_BODY
         setting :status,  FailResponse::DEFAULT_STATUS
         setting :headers, FailResponse::DEFAULT_HEADERS

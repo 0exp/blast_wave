@@ -26,8 +26,8 @@ module Rack
       #
       # @api public
       # @since 0.1.0
-      def match_via(&block)
-        checker.register(block)
+      def match_by(&block)
+        checker.register(&block)
       end
     end
 

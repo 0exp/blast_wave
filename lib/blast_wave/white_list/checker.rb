@@ -9,7 +9,7 @@ module Rack
     # @api private
     # @since 0.1.0
     def initialize
-      @matchers = BlastWave::WhiteList::MatcherList.new
+      @matcher_registry = BlastWave::WhiteList::MatcherRegistry.new
     end
 
     # @param request [Rack::Request]
@@ -28,16 +28,16 @@ module Rack
     # @api private
     # @since 0.1.0
     def register(&block)
-      matchers.register(BlastWave::WhiteList::Matcher.new(block))
+      matcher_registry.register(BlastWave::WhiteList::Matcher.new(block))
     end
 
     private
 
-    # @return [BlastWave::WhiteList::MatcherList]
+    # @return [BlastWave::WhiteList::MatcherRegistry]
     #
     # @api private
     # @since 0.1.0
-    attr_reader :matchers
+    attr_reader :matcher_registry
 
     # @param request [Rack::Request]
     # @return [Boolean]
@@ -45,7 +45,7 @@ module Rack
     # @api private
     # @since 0.1.0
     def any?(request)
-      matchers.all?(request)
+      matcher_registry.all?(request)
     end
 
     # @param request [Rack::Request]
@@ -54,7 +54,7 @@ module Rack
     # @api private
     # @since 0.1.0
     def all?(request)
-      matchers.any?(request)
+      matcher_registry.any?(request)
     end
   end
 end
