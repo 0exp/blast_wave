@@ -12,4 +12,4 @@ AllCops:
     - spec/**/*.rb
     - Gemfile
     - Rakefile
-    - blastwave.gemspec
+    - blast_wave.gemspec
