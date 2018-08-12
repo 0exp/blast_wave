@@ -8,6 +8,7 @@ module Rack
     #
     # @api private
     # @since 0.1.0
+    # rubocop:disable Metrics/BlockLength
     INSTRUCTIONS = proc do
       # @since 0.1.0
       include Qonfig::Configurable
@@ -58,6 +59,7 @@ module Rack
         )
       end
     end
+    # rubocop:enable Metrics/BlockLength
 
     class << self
       # @param empty_middleware_klass [Class<BlastWave::MiddleWare>]
