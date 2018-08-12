@@ -2,16 +2,16 @@
 
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'blastwave/version'
+require 'blast_wave/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'blastwave'
-  spec.version       = Blastwave::VERSION
+  spec.name          = 'blast_wave'
+  spec.version       = Rack::BlastWave::VERSION
   spec.authors       = ['Rustam Ibragimov']
   spec.email         = ['iamdaiver@icloud.com']
   spec.summary       = 'Soon'
   spec.description   = 'Soon'
-  spec.homepage      = 'https://github.com/0exp/blastwave'
+  spec.homepage      = 'https://github.com/0exp/blast_wave'
   spec.license       = 'MIT'
 
   spec.bindir        = 'bin'
@@ -22,11 +22,14 @@ Gem::Specification.new do |spec|
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(spec|features)/}) }
   end
 
-  spec.add_development_dependency 'coveralls',        '~> 0.8.21'
-  spec.add_development_dependency 'simplecov',        '~> 0.14.1'
-  spec.add_development_dependency 'simplecov-json',   '~> 0.2'
-  spec.add_development_dependency 'armitage-rubocop', '~> 0.5.0'
-  spec.add_development_dependency 'rspec',            '~> 3.7.0'
+  spec.add_dependency 'rack'
+  spec.add_dependency 'qonfig'
+
+  spec.add_development_dependency 'coveralls',        '~> 0.8'
+  spec.add_development_dependency 'simplecov',        '~> 0.16'
+  spec.add_development_dependency 'armitage-rubocop', '~> 0.5'
+  spec.add_development_dependency 'rspec',            '~> 3.8'
+  spec.add_development_dependency 'rack-test',        '~> 1.1'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'

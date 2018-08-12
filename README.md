@@ -1,3 +1,3 @@
-# Blastwave &middot; [![Build Status](https://travis-ci.org/0exp/blastwave.svg?branch=master)](https://travis-ci.org/0exp/blastwave)
+# BlastWave &middot; [![Gem Version](https://badge.fury.io/rb/blast_wave.svg)](https://badge.fury.io/rb/blast_wave) [![Build Status](https://travis-ci.org/0exp/blast_wave.svg?branch=master)](https://travis-ci.org/0exp/blast_wave) [![Coverage Status](https://coveralls.io/repos/github/0exp/blast_wave/badge.svg?branch=master)](https://coveralls.io/github/0exp/blast_wave?branch=master)
 
 In active development...
