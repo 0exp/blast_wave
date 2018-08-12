@@ -24,7 +24,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'rack'
   spec.add_dependency 'qonfig'
-  spec.add_dependency 'concurrent-ruby'
 
   spec.add_development_dependency 'coveralls',        '~> 0.8'
   spec.add_development_dependency 'simplecov',        '~> 0.16'
