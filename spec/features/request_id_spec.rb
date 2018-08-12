@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 RSpec.describe 'Rack::BlastWave::RequestId Middleware' do
+  before do
+    # NOTE: inject fake request id randomizer
+    Rack::BlastWave::RequestId.configure do |conf|
+      fake_id_values = %w[1 2 3 4 5 6 7 8].cycle
+      conf.id_randomizer = -> { fake_id_values.next }
+    end
+  end
+
   let(:app) { build_fake_rack_app(Rack::BlastWave::RequestId) }
 
   describe 'request interface' do
@@ -14,14 +22,6 @@ RSpec.describe 'Rack::BlastWave::RequestId Middleware' do
   end
 
   describe 'request id randomization' do
-    before do
-      # NOTE: inject fake request id randomizer
-      Rack::BlastWave::RequestId.configure do |conf|
-        fake_id_values = %w[1 2 3 4 5 6 7 8].cycle
-        conf.id_randomizer = -> { fake_id_values.next }
-      end
-    end
-
     specify 'each request gets his own request_id' do
       request_results = make_request_series(3, :get, '/')
 
