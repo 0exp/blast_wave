@@ -2,8 +2,11 @@
 
 RSpec.describe 'Rack::BlastWave::WhiteList Middleware' do
   before do
+    # NOTE: nameless filter
     Rack::BlastWave::WhiteList.filter { |request| request.ip == '123.123.123.123' }
-    Rack::BlastWave::WhiteList.filter { |request| request.get? }
+
+    # NOTE: named filter
+    Rack::BlastWave::WhiteList.filter('actions') { |request| request.get? || request.post? }
   end
 
   after { Rack::BlastWave::WhiteList.clear! }

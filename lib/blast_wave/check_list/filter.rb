@@ -21,8 +21,8 @@ module Rack
     #
     # @api private
     # @since 0.1.0
-    def initialize(name = nil, matcher)
-      @name    = name || matcher.object_id
+    def initialize(name, matcher)
+      @name    = name
       @matcher = matcher
     end
 
