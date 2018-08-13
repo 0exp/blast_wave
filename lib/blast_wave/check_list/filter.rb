@@ -34,5 +34,6 @@ module Rack
     def match?(request)
       !!matcher.call(request)
     end
+    alias_method :call, :match?
   end
 end
