@@ -9,7 +9,7 @@ module Rack
     # @api private
     # @since 0.1.0
     # rubocop:disable Metrics/BlockLength
-    INSTRUCTIONS = proc do
+    CLASS_DEFINITIONS = proc do |check_all: false|
       # @since 0.1.0
       include Qonfig::Configurable
       # @since 0.1.0
@@ -17,7 +17,7 @@ module Rack
 
       # @since 0.1.0
       configuration do
-        setting :check_all, false
+        setting :check_all, check_all
 
         setting :fail_response do
           setting :body,    BlastWave::CheckList::FailResponse::DEFAULT_BODY
@@ -69,7 +69,7 @@ module Rack
       # @since 0.1.0
       def build(empty_middleware_klass = Class.new(BlastWave::Middleware), &additionals)
         empty_middleware_klass.tap do |middleware_klass|
-          middleware_klass.class_eval(&INSTRUCTIONS)
+          middleware_klass.class_eval(&CLASS_DEFINITIONS)
           middleware_klass.class_eval(&additionals) if block_given?
         end
       end

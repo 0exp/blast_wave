@@ -12,6 +12,16 @@ module Rack
     require_relative 'check_list/builder'
 
     class << self
+      # Creates a clone of the current middleware with it's own initial settings.
+      #
+      # @return [Class<BlastWave::CheckList>]
+      #
+      # @api public
+      # @since 0.1.0
+      def build
+        Class.new(self)
+      end
+
       # @param child_klass [Class]
       # @return [void]
       #
