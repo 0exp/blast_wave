@@ -8,6 +8,19 @@ RSpec.describe 'Rack::BlastWave::WhiteList Middleware' do
 
   after { Rack::BlastWave::WhiteList.clear! }
 
+  describe 'defaults' do
+    let(:middleware) { Rack::BlastWave::WhiteList.build }
+
+    specify 'default settings' do
+      middleware.config.settings.tap do |config|
+        expect(config.check_all).to eq(false)
+        expect(config.fail_response.status).to eq(403)
+        expect(config.fail_response.body).to eq(['Forbidden'])
+        expect(config.fail_response.headers).to eq('Content-Type' => 'text/plain')
+      end
+    end
+  end
+
   describe 'bad response configuration' do
     before { Rack::BlastWave::WhiteList.configure { |conf| conf.check_all = false } }
 
