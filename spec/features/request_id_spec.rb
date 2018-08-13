@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe 'Rack::BlastWave::RequestId Middleware' do
+describe 'Rack::BlastWave::RequestId Middleware' do
   before do
     # NOTE: inject fake request id randomizer
     Rack::BlastWave::RequestId.configure do |conf|

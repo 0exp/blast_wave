@@ -7,6 +7,7 @@ module Rack
     require_relative 'check_list/filter'
     require_relative 'check_list/filter_registry'
     require_relative 'check_list/fail_response'
+    require_relative 'check_list/common_filters/ip_addrs'
     require_relative 'check_list/checkable'
     require_relative 'check_list/checker'
     require_relative 'check_list/builder'

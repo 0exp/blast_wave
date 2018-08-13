@@ -30,13 +30,13 @@ module Rack
       filter_registry.clear!
     end
 
-    # @param block [Proc]
+    # @param callable [Object] #call-able object
     # @return [void]
     #
     # @api private
     # @since 0.1.0
-    def register(name, &block)
-      filter_registry.register(BlastWave::CheckList::Filter.new(name, block))
+    def register(filter)
+      filter_registry.register(filter)
     end
 
     # @param name [Object]

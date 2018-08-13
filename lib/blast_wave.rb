@@ -3,6 +3,7 @@
 require 'rack'
 require 'securerandom'
 require 'qonfig'
+require 'ipaddr'
 require 'concurrent/map'
 
 module Rack
