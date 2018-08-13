@@ -14,14 +14,14 @@ module SpecSupport
       end
     end
 
-    def make_request(method, path, options = {})
-      send(method, path, options)
+    def make_request(method, path, query_opts: {}, env_opts: {})
+      send(method, path, query_opts, env_opts)
     end
 
-    def make_request_series(count, method, path, options = {})
+    def make_request_series(count, method, path, query_opts: {}, env_opts: {})
       [].tap do |request_results|
         count.times do |current_time|
-          make_request(method, path, options)
+          make_request(method, path, query_opts: query_opts, env_opts: env_opts)
 
           request_results << RequestSeriesResult.new(
             current_time,
