@@ -22,6 +22,19 @@ RSpec.describe 'Rack::BlastWave::BlackList Middleware' do
         expect(config.fail_response.headers).to eq('Content-Type' => 'text/plain')
       end
     end
+
+    specify 'each middleware instance has own settings' do
+      middleware_1 = Rack::BlastWave::BlackList.build.tap do |middleware|
+        middleware.configure { |conf| conf.fail_response.status = 423 }
+      end
+
+      middleware_2 = Rack::BlastWave::BlackList.build.tap do |middleware|
+        middleware.configure { |conf| conf.fail_response.status = 451 }
+      end
+
+      expect(middleware_1.new(double).options.fail_response.status).to eq(423)
+      expect(middleware_2.new(double).options.fail_response.status).to eq(451)
+    end
   end
 
   describe 'bad response configuration' do

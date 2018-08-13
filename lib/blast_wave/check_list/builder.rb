@@ -26,8 +26,6 @@ module Rack
         end
       end
 
-      private
-
       # @return [Qonfig::Settings]
       #
       # @api private
@@ -35,6 +33,8 @@ module Rack
       def options
         self.class.config.settings
       end
+
+      private
 
       # @param env [Hash]
       # @return [Boolean]
