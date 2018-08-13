@@ -12,7 +12,7 @@ module Rack
     # @api private
     # @since 0.1.0
     def initialize
-      @filters = Concurrent::Array.new
+      @filters = Concurrent::Map.new
     end
 
     # @param matcher [BlastWave::CheckList::Filter]
@@ -21,7 +21,16 @@ module Rack
     # @api private
     # @since 0.1.0
     def register(filter)
-      filters << filter
+      filters[filter.name] = filter
+    end
+
+    # @param name [Object]
+    # @return [Blastwave::CheckList::Filter]
+    #
+    # @api private
+    # @since 0.1.0
+    def fetch(name)
+      filters[name]
     end
 
     # @return [void]
@@ -38,7 +47,7 @@ module Rack
     # @api private
     # @since 0.1.0
     def each(&block)
-      block_given? ? filters.each(&block) : filters.each
+      block_given? ? filters.values.each(&block) : filters.values.each
     end
 
     private

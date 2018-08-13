@@ -3,7 +3,7 @@
 require 'rack'
 require 'securerandom'
 require 'qonfig'
-require 'concurrent/array'
+require 'concurrent/map'
 
 module Rack
   # @api public

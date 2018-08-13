@@ -35,8 +35,17 @@ module Rack
     #
     # @api private
     # @since 0.1.0
-    def register(name = nil, &block)
-      filter_registry.register(BlastWave::CheckList::Filter.new(name || block.object_id, block))
+    def register(name, &block)
+      filter_registry.register(BlastWave::CheckList::Filter.new(name, block))
+    end
+
+    # @param name [Object]
+    # @return [BlastWave::CheckList::Filter]
+    #
+    # @api private
+    # @since 0.1.0
+    def fetch(name)
+      filter_registry.fetch(name)
     end
 
     private

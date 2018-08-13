@@ -12,9 +12,29 @@ RSpec.describe 'Rack::BlastWave::WhiteList Middleware' do
   after { Rack::BlastWave::WhiteList.clear! }
 
   describe 'defaults' do
-    let(:middleware) { Rack::BlastWave::WhiteList.build }
+    specify 'filter fetching' do
+      middleware = Rack::BlastWave::WhiteList.build
+
+      filter_1_value = [true, false].sample
+      filter_2_value = [true, false].sample
+      filter_3_value = [true, false].sample
+
+      filter_1 = proc { filter_1_value }
+      filter_2 = proc { filter_2_value }
+      filter_3 = proc { filter_3_value }
+
+      middleware.filter('first_filter',  &filter_1)
+      middleware.filter('second_filter', &filter_2)
+      middleware.filter('third_filter',  &filter_3)
+
+      expect(middleware.filter('first_filter').match?(double)).to  eq(filter_1_value)
+      expect(middleware.filter('second_filter').match?(double)).to eq(filter_2_value)
+      expect(middleware.filter('third_filter').match?(double)).to  eq(filter_3_value)
+    end
 
     specify 'default settings' do
+      middleware = Rack::BlastWave::WhiteList.build
+
       middleware.config.settings.tap do |config|
         expect(config.check_all).to eq(false)
         expect(config.fail_response.status).to eq(403)

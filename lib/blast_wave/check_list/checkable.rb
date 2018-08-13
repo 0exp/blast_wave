@@ -27,7 +27,7 @@ module Rack
       # @api public
       # @since 0.1.0
       def filter(name = nil, &block)
-        checker.register(name, &block)
+        block_given? ? checker.register(name || block.object_id, &block) : checker.fetch(name)
       end
 
       # @return [void]
