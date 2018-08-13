@@ -3,19 +3,26 @@
 module Rack
   # @api private
   # @since 0.1.0
-  class BlastWave::CheckList::Matcher
+  class BlastWave::CheckList::Filter
     # @return [Object] #call-able object
     #
     # @api private
     # @since 0.1.0
     attr_reader :matcher
 
+    # @return [String]
+    #
+    # @api private
+    # @since 0.1.0
+    attr_reader :name
+
     # @param matcher [Object] #call-able object
     # @return [void]
     #
     # @api private
     # @since 0.1.0
-    def initialize(matcher)
+    def initialize(name = nil, matcher)
+      @name    = name || matcher.object_id
       @matcher = matcher
     end
 

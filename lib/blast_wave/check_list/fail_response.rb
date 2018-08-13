@@ -8,7 +8,7 @@ module Rack
     #
     # @api private
     # @since 0.1.0
-    DEFAULT_BODY = ['Forbidden'].freeze
+    DEFAULT_BODY = ["Forbidden\n"].freeze
 
     # @return [Hash]
     #

@@ -9,7 +9,7 @@ module Rack
     # @api private
     # @since 0.1.0
     def initialize
-      @matcher_registry = BlastWave::CheckList::MatcherRegistry.new
+      @filter_registry = BlastWave::CheckList::FilterRegistry.new
     end
 
     # @param request [Rack::Request]
@@ -27,7 +27,7 @@ module Rack
     # @api private
     # @since 0.1.0
     def clear!
-      matcher_registry.clear!
+      filter_registry.clear!
     end
 
     # @param block [Proc]
@@ -35,17 +35,17 @@ module Rack
     #
     # @api private
     # @since 0.1.0
-    def register(&block)
-      matcher_registry.register(BlastWave::CheckList::Matcher.new(block))
+    def register(name = nil, &block)
+      filter_registry.register(BlastWave::CheckList::Filter.new(name, block))
     end
 
     private
 
-    # @return [BlastWave::CheckList::MatcherRegistry]
+    # @return [BlastWave::CheckList::FilterRegistry]
     #
     # @api private
     # @since 0.1.0
-    attr_reader :matcher_registry
+    attr_reader :filter_registry
 
     # @param request [Rack::Request]
     # @return [Boolean]
@@ -53,7 +53,7 @@ module Rack
     # @api private
     # @since 0.1.0
     def any?(request)
-      matcher_registry.any? { |matcher| matcher.match?(request) }
+      filter_registry.any? { |filter| filter.match?(request) }
     end
 
     # @param request [Rack::Request]
@@ -62,7 +62,7 @@ module Rack
     # @api private
     # @since 0.1.0
     def all?(request)
-      matcher_registry.all? { |matcher| matcher.match?(request) }
+      filter_registry.all? { |filter| filter.match?(request) }
     end
   end
 end

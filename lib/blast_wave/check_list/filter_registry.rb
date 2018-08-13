@@ -3,7 +3,7 @@
 module Rack
   # @api private
   # @since 0.1.0
-  class BlastWave::CheckList::MatcherRegistry
+  class BlastWave::CheckList::FilterRegistry
     # @since 0.1.0
     include Enumerable
 
@@ -12,17 +12,16 @@ module Rack
     # @api private
     # @since 0.1.0
     def initialize
-      @list = []
-      @lock = Mutex.new
+      @filters = Concurrent::Array.new
     end
 
-    # @param matcher [BlastWave::CheckList::Matcher]
+    # @param matcher [BlastWave::CheckList::Filter]
     # @return [void]
     #
     # @api private
     # @since 0.1.0
-    def register(matcher)
-      lock.synchronize { list << matcher }
+    def register(filter)
+      filters << filter
     end
 
     # @return [void]
@@ -30,7 +29,7 @@ module Rack
     # @api private
     # @since 0.1.0
     def clear!
-      lock.synchronize { list.clear }
+      filters.clear
     end
 
     # @param block [Proc]
@@ -39,7 +38,7 @@ module Rack
     # @api private
     # @since 0.1.0
     def each(&block)
-      block_given? ? list.each(&block) : list.each
+      block_given? ? filters.each(&block) : filters.each
     end
 
     private
@@ -48,12 +47,6 @@ module Rack
     #
     # @api private
     # @since 0.1.0
-    attr_reader :list
-
-    # @return [Mutex]
-    #
-    # @api private
-    # @since 0.1.0
-    attr_reader :lock
+    attr_reader :filters
   end
 end

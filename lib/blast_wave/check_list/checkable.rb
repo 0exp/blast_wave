@@ -26,8 +26,8 @@ module Rack
       #
       # @api public
       # @since 0.1.0
-      def filter(&block)
-        checker.register(&block)
+      def filter(name = nil, &block)
+        checker.register(name, &block)
       end
 
       # @return [void]

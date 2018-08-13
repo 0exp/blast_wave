@@ -15,7 +15,7 @@ RSpec.describe 'Rack::BlastWave::BlackList Middleware' do
       middleware.config.settings.tap do |config|
         expect(config.check_all).to eq(false)
         expect(config.fail_response.status).to eq(403)
-        expect(config.fail_response.body).to eq(['Forbidden'])
+        expect(config.fail_response.body).to eq(["Forbidden\n"])
         expect(config.fail_response.headers).to eq('Content-Type' => 'text/plain')
       end
     end

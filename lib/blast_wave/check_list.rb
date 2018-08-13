@@ -4,8 +4,8 @@ module Rack
   # @api private
   # @since 0.1.0
   class BlastWave::CheckList < BlastWave::Middleware
-    require_relative 'check_list/matcher'
-    require_relative 'check_list/matcher_registry'
+    require_relative 'check_list/filter'
+    require_relative 'check_list/filter_registry'
     require_relative 'check_list/fail_response'
     require_relative 'check_list/checkable'
     require_relative 'check_list/checker'
