@@ -22,6 +22,14 @@ module Rack
       check_all ? all?(request) : any?(request)
     end
 
+    # @return [void]
+    #
+    # @api private
+    # @since 0.1.0
+    def clear!
+      matcher_registry.clear!
+    end
+
     # @param block [Proc]
     # @return [void]
     #
@@ -45,7 +53,7 @@ module Rack
     # @api private
     # @since 0.1.0
     def any?(request)
-      matcher_registry.all?(request)
+      matcher_registry.any? { |matcher| matcher.match?(request) }
     end
 
     # @param request [Rack::Request]
@@ -54,7 +62,7 @@ module Rack
     # @api private
     # @since 0.1.0
     def all?(request)
-      matcher_registry.any?(request)
+      matcher_registry.all? { |matcher| matcher.match?(request) }
     end
   end
 end

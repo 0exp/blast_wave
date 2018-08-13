@@ -26,8 +26,16 @@ module Rack
       #
       # @api public
       # @since 0.1.0
-      def match_by(&block)
+      def filter(&block)
         checker.register(&block)
+      end
+
+      # @return [void]
+      #
+      # @api public
+      # @since 0.1.0
+      def clear!
+        checker.clear!
       end
     end
 

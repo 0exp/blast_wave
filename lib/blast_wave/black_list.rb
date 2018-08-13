@@ -4,8 +4,6 @@ module Rack
   # @api public
   # @since 0.1.0
   class BlastWave::BlackList < BlastWave::CheckList
-    BlastWave::CheckList::Builder.build(self)
-
     # @param env [Hash]
     # @return [Object]
     #

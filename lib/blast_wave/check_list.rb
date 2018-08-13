@@ -10,5 +10,16 @@ module Rack
     require_relative 'check_list/checkable'
     require_relative 'check_list/checker'
     require_relative 'check_list/builder'
+
+    class << self
+      # @param child_klass [Class]
+      # @return [void]
+      #
+      # @api private
+      # @since 0.1.0
+      def inherited(child_klass)
+        BlastWave::CheckList::Builder.build(child_klass)
+      end
+    end
   end
 end

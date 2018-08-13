@@ -25,6 +25,14 @@ module Rack
       lock.synchronize { list << matcher }
     end
 
+    # @return [void]
+    #
+    # @api private
+    # @since 0.1.0
+    def clear!
+      lock.synchronize { list.clear }
+    end
+
     # @param block [Proc]
     # @return [void]
     #

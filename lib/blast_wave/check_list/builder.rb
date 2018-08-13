@@ -52,11 +52,11 @@ module Rack
       # @api private
       # @since 0.1.0
       def generate_fail_response!
-        FailResponse.build(
+        BlastWave::CheckList::FailResponse.build(
           status:  options.fail_response.status,
           body:    options.fail_response.body,
           headers: options.fail_response.headers
-        )
+        ).finish
       end
     end
     # rubocop:enable Metrics/BlockLength
@@ -67,8 +67,11 @@ module Rack
       #
       # @api public
       # @since 0.1.0
-      def build(empty_middleware_klass = Class.new(BlastWave::Middleware))
-        empty_middleware_klass.class_eval(&INSTRUCTIONS)
+      def build(empty_middleware_klass = Class.new(BlastWave::Middleware), &additionals)
+        empty_middleware_klass.tap do |middleware_klass|
+          middleware_klass.class_eval(&INSTRUCTIONS)
+          middleware_klass.class_eval(&additionals) if block_given?
+        end
       end
     end
   end
