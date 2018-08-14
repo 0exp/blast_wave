@@ -2,7 +2,7 @@
 
 module Rack
   class BlastWave::RequestId
-    module Extentions
+    module Extensions
       # @api private
       # @since 0.1.0
       module RequestInterface

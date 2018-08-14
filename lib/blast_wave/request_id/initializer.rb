@@ -33,8 +33,8 @@ module Rack
         # @since 0.1.0
         def extend_request_interface!
           INITIALIZATION_LOCK.synchronize do
-            unless Rack::Request.include?(BlastWave::RequestId::Extentions::RequestInterface)
-              Rack::Request.prepend(BlastWave::RequestId::Extentions::RequestInterface)
+            unless Rack::Request.include?(BlastWave::RequestId::Extensions::RequestInterface)
+              Rack::Request.prepend(BlastWave::RequestId::Extensions::RequestInterface)
             end
           end
         end
