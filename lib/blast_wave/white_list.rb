@@ -10,7 +10,14 @@ module Rack
     # @api private
     # @since 0.1.0
     def call(env)
-      check!(env) ? super : generate_fail_response!
+      case
+      when no_filters? || check!(env)
+        super
+      when lock_requests?
+        generate_fail_response!
+      else
+        super
+      end
     end
   end
 end

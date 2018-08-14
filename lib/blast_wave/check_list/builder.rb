@@ -18,6 +18,7 @@ module Rack
       # @since 0.1.0
       configuration do
         setting :check_all, check_all
+        setting :lock_requests, true
 
         setting :fail_response do
           setting :body,    BlastWave::CheckList::FailResponse::DEFAULT_BODY
@@ -43,8 +44,23 @@ module Rack
       # @since 0.1.0
       def check!(env)
         request = Rack::Request.new(env)
-        should_check_all = options.check_all?
-        checker.check!(request, check_all: should_check_all)
+        checker.check!(request, check_all: options.check_all?)
+      end
+
+      # @return [Boolean]
+      #
+      # @api private
+      # @since 0.1.0
+      def no_filters?
+        checker.empty?
+      end
+
+      # @return [Boolean]
+      #
+      # @api private
+      # @since 0.1.0
+      def lock_requests?
+        options.lock_requests?
       end
 
       # @return [Rack::Response]

@@ -22,6 +22,14 @@ module Rack
       check_all ? all?(request) : any?(request)
     end
 
+    # @return [Boolean]
+    #
+    # @api private
+    # @since 0.1.0
+    def empty?
+      filter_registry.empty?
+    end
+
     # @return [void]
     #
     # @api private
