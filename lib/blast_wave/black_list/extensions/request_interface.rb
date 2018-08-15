@@ -10,7 +10,7 @@ module Rack
         #
         # @api public
         # @since 0.1.0
-        def blacklist_info
+        def black_list_info
           env[ENVIRONMENT_KEY]
         end
 
@@ -18,16 +18,16 @@ module Rack
         #
         # @api public
         # @since 0.1.0
-        def locked_by_blacklist?
-          blacklist_info[:locked]
+        def locked_by_black_list?
+          black_list_info[:locked]
         end
 
         # @return [Array<String>]
         #
         # @api public
         # @since 0.1.0
-        def triggered_blacklist_filters
-          blacklist_info[:triggered_filters]
+        def triggered_black_list_filters
+          black_list_info[:triggered_filters]
         end
       end
     end

@@ -71,9 +71,9 @@ module Rack
     # @api private
     # @since 0.1.0
     def any?(request)
-      filter_registry.any? do |filter|
+      filter_registry.select do |filter|
         filter.match?(request).tap { |is_matched| yield(filter) if is_matched && block_given? }
-      end
+      end.any?
     end
 
     # @param request [Rack::Request]

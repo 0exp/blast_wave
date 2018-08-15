@@ -10,7 +10,7 @@ module Rack
         #
         # @api public
         # @since 0.1.0
-        def whitelist_info
+        def white_list_info
           env[ENVIRONMENT_KEY]
         end
 
@@ -18,16 +18,16 @@ module Rack
         #
         # @api public
         # @since 0.1.0
-        def locked_by_whitelist?
-          whitelist_info[:locked]
+        def locked_by_white_list?
+          white_list_info[:locked]
         end
 
         # @return [Array<String>]
         #
         # @api public
         # @since 0.1.0
-        def triggered_whitelist_filters
-          whitelist_info[:triggered_filters]
+        def triggered_white_list_filters
+          white_list_info[:triggered_filters]
         end
       end
     end
