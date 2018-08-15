@@ -14,12 +14,13 @@ module Rack
 
     # @param request [Rack::Request]
     # @option check_all [Boolean]
+    # @param block [Proc]
     # @return [Boolean]
     #
     # @api private
     # @since 0.1.0
-    def check!(request, check_all: false)
-      check_all ? all?(request) : any?(request)
+    def check!(request, check_all: false, &block)
+      check_all ? all?(request, &block) : any?(request, &block)
     end
 
     # @return [Boolean]
@@ -70,7 +71,9 @@ module Rack
     # @api private
     # @since 0.1.0
     def any?(request)
-      filter_registry.any? { |filter| filter.match?(request) }
+      filter_registry.any? do |filter|
+        filter.match?(request).tap { |is_matched| yield(filter) if is_matched && block_given? }
+      end
     end
 
     # @param request [Rack::Request]
@@ -79,7 +82,9 @@ module Rack
     # @api private
     # @since 0.1.0
     def all?(request)
-      filter_registry.all? { |filter| filter.match?(request) }
+      filter_registry.all? do |filter|
+        filter.match?(request).tap { |is_matched| yield(filter) if is_matched && block_given? }
+      end
     end
   end
 end

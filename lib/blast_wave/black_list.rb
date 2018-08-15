@@ -4,20 +4,24 @@ module Rack
   # @api public
   # @since 0.1.0
   class BlastWave::BlackList < BlastWave::CheckList
-    # @param env [Hash]
-    # @return [Object]
+    require_relative 'black_list/extensions/request_interface'
+    require_relative 'black_list/initializer'
+    require_relative 'black_list/auditor'
+
+    # @return [String]
     #
     # @api private
     # @since 0.1.0
-    def call(env)
-      case
-      when no_filters?
-        super
-      when check!(env) && lock_requests?
-        generate_fail_response!
-      else
-        super
-      end
+    ENVIRONMENT_KEY = 'rack.blastwave.black_list'
+
+    # @param [Object] app
+    # @return [void]
+    #
+    # @api private
+    # @since 0.1.0
+    def initialize(app)
+      super
+      Initializer.call(app)
     end
   end
 end

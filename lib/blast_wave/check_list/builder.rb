@@ -8,7 +8,6 @@ module Rack
     #
     # @api private
     # @since 0.1.0
-    # rubocop:disable Metrics/BlockLength
     CLASS_DEFINITIONS = proc do |check_all: false|
       # @since 0.1.0
       include Qonfig::Configurable
@@ -26,56 +25,7 @@ module Rack
           setting :headers, BlastWave::CheckList::FailResponse::DEFAULT_HEADERS
         end
       end
-
-      # @return [Qonfig::Settings]
-      #
-      # @api private
-      # @since 0.1.0
-      def options
-        self.class.config.settings
-      end
-
-      private
-
-      # @param env [Hash]
-      # @return [Boolean]
-      #
-      # @api private
-      # @since 0.1.0
-      def check!(env)
-        request = Rack::Request.new(env)
-        checker.check!(request, check_all: options.check_all?)
-      end
-
-      # @return [Boolean]
-      #
-      # @api private
-      # @since 0.1.0
-      def no_filters?
-        checker.empty?
-      end
-
-      # @return [Boolean]
-      #
-      # @api private
-      # @since 0.1.0
-      def lock_requests?
-        options.lock_requests?
-      end
-
-      # @return [Rack::Response]
-      #
-      # @api private
-      # @since 0.1.0
-      def generate_fail_response!
-        BlastWave::CheckList::FailResponse.build(
-          status:  options.fail_response.status,
-          body:    options.fail_response.body,
-          headers: options.fail_response.headers
-        ).finish
-      end
     end
-    # rubocop:enable Metrics/BlockLength
 
     class << self
       # @param empty_middleware_klass [Class<BlastWave::MiddleWare>]

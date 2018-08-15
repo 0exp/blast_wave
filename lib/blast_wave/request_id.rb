@@ -14,7 +14,7 @@ module Rack
     #
     # @api public
     # @since 0.1.0
-    REQUEST_ID_ENV_KEY = 'rack.blastwave.request_id'
+    ENVIRONMENT_KEY = 'rack.blastwave.request_id'
 
     # @since 0.1.0
     configuration { setting :id_randomizer, -> { SecureRandom.hex } }
@@ -50,7 +50,7 @@ module Rack
     # @api private
     # @since 0.1.0
     def append_request_id!(env)
-      env[REQUEST_ID_ENV_KEY] = generate_request_id
+      env[ENVIRONMENT_KEY] = generate_request_id
     end
 
     # @return [String]
