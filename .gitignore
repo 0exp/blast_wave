@@ -11,3 +11,4 @@
 .ruby-version
 gemfiles/*.lock
 *.gem
+TODOS.md
