@@ -11,6 +11,7 @@ module Rack
   # @since 0.0.0
   module BlastWave
     require_relative 'blast_wave/version'
+    require_relative 'blast_wave/utilities'
     require_relative 'blast_wave/middleware'
     require_relative 'blast_wave/request_id'
     require_relative 'blast_wave/check_list'
