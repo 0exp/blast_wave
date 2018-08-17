@@ -29,7 +29,7 @@ module Rack
       #
       # @api private
       # @since 0.1.0
-      def read(key, **options)
+      def read(key)
         raise NotImplementedError
       end
 
@@ -50,7 +50,7 @@ module Rack
       #
       # @api private
       # @since 0.1.0
-      def delete(key, **options)
+      def delete(key)
         raise NotImplementedError
       end
 
@@ -73,6 +73,16 @@ module Rack
       # @api private
       # @since 0.1.0
       def decrement(key, value, **options)
+        raise NotImplementedError
+      end
+
+      # @param key [String]
+      # @param period [Integer]
+      # @return [void]
+      #
+      # @api private
+      # @since 0.1.0
+      def re_expire(key, period)
         raise NotImplementedError
       end
     end

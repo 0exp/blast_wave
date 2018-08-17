@@ -4,23 +4,21 @@ module Rack
   module BlastWave::Utilities::Cache::Adapters
     # @api private
     # @since 0.1.0
-    class Redis < Basic
+    class Dalli < Basic
       # @since 0.1.0
       def_delegators :driver,
                      :get,
                      :set,
-                     :setex,
-                     :del,
-                     :incrby,
-                     :decrby,
-                     :pipelined,
-                     :expire
+                     :incr,
+                     :decr,
+                     :multi,
+                     :touch
 
-      # @return [NilClass]
+      # @return [Integer]
       #
       # @api private
       # @since 0.1.0
-      NO_EXPIRATION_TTL = nil
+      NO_EXPIRATION_TTL = 0
 
       # @return [Integer]
       #
@@ -37,17 +35,10 @@ module Rack
         get(key)
       end
 
-      # @param key [String]
-      # @param value [Object]
-      # @option expires_in [NilClass, Integer] Time in seconds
-      # @return [void]
-      #
-      # @api private
-      # @since 0.1.0
       def write(key, value, **options)
         expires_in = options.fetch(:expires_in, NO_EXPIRATION_TTL)
 
-        expires_in ? setex(key, expires_in, value) : set(key, value)
+        set(key, value, expires_in, raw: true)
       end
 
       # @param key [String]
@@ -56,45 +47,33 @@ module Rack
       # @api private
       # @since 0.1.0
       def delete(key)
-        del(key)
+        driver.delete(key)
       end
 
       # @param key [String]
       # @param amount [Integer]
-      # @option expires_in [NilClass, Integer] Time in seconds
+      # @option expires_in [NilClass, Integer]
       # @return [NilClass, Integer]
       #
       # @api private
       # @since 0.1.0
       def increment(key, amount = DEFAULT_INCRDECR_AMOUNT, **options)
         expires_in = options.fetch(:expires_in, NO_EXPIRATION_TTL)
-        new_amount = nil
 
-        pipelined do
-          new_amount = incrby(key, amount)
-          expire(key, expires_in) if expires_in
-        end
-
-        new_amount && new_amount.value
+        incr(key, amount, expires_in, amount)
       end
 
       # @param key [String]
       # @param amount [Integer]
-      # @options expires_in [NillClass, Integer] Time in seconds
-      # @return [NillClass, Integer]
+      # @option expires_in [NilClass, Integer]
+      # @return [NilClass, Integer]
       #
       # @api private
       # @since 0.1.0
       def decrement(key, amount = DEFAULT_INCRDECR_AMOUNT, **options)
         expires_in = options.fetch(:expires_in, NO_EXPIRATION_TTL)
-        new_amount = nil
 
-        pipelined do
-          new_amount = decrby(key, amount)
-          expire(key, expires_in) if expires_in
-        end
-
-        new_amount && new_amount.value
+        decr(key, amount, expires_in, amount)
       end
 
       # @param key [String]
@@ -104,8 +83,9 @@ module Rack
       # @api private
       # @since 0.1.0
       def re_expire(key, period = NO_EXPIRATION_TTL)
-        expire(key, period)
+        touch(key, period)
       end
     end
   end
 end
+

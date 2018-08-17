@@ -6,6 +6,7 @@ module Rack
   module BlastWave::Utilities::Cache::Adapters
     require_relative 'adapters/basic'
     require_relative 'adapters/redis'
+    require_relative 'adapters/dalli'
 
     class << self
       # @param driver [Object]
@@ -19,6 +20,8 @@ module Rack
         case
         when defined?(::Redis) && driver.is_a?(::Redis)
           BlastWave::Utilities::Cache::Adapters::Redis.new(driver)
+        when defined?(::Dalli) && defined?(::Dalli::Client) && driver.is_a?(::Dalli::Client)
+          BlastWave::Utilities::Cache::Adapters::Dalli.new(driver)
         else
           raise BlastWave::UnsupportedDriverError
         end
