@@ -5,6 +5,7 @@ module Rack
   # @since 0.1.0
   module BlastWave::Utilities::Cache::Adapters
     require_relative 'adapters/basic'
+    require_relative 'adapters/delegator'
     require_relative 'adapters/dalli'
     require_relative 'adapters/redis'
     require_relative 'adapters/redis_store'
@@ -26,7 +27,7 @@ module Rack
         when defined?(::Dalli) && defined?(::Dalli::Client) && driver.is_a?(::Dalli::Client)
           BlastWave::Utilities::Cache::Adapters::Dalli.new(driver)
         else
-          raise BlastWave::UnsupportedDriverError
+          BlastWave::Utilities::Cache::Adapters::Dleegator.new(driver)
         end
       end
     end
