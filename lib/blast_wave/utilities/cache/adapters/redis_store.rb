@@ -6,11 +6,12 @@ module Rack
     # @since 0.1.0
     class RedisStore < Redis
       # @param key [String]
+      # @param options [Hash]
       # @return [Object]
       #
       # @api private
       # @since 0.1.0
-      def read(key)
+      def read(key, **options)
         get(key, raw: true)
       end
 

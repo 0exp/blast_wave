@@ -29,11 +29,12 @@ module Rack
       DEFAULT_INCRDECR_AMOUNT = 1
 
       # @param key [String]
+      # @param options [Hash]
       # @return [Object]
       #
       # @api private
       # @since 0.1.0
-      def read(key)
+      def read(key, **options)
         get(key)
       end
 
@@ -51,11 +52,12 @@ module Rack
       end
 
       # @param key [String]
+      # @param options [Hash]
       # @return [void]
       #
       # @api private
       # @since 0.1.0
-      def delete(key)
+      def delete(key, **options)
         del(key)
       end
 

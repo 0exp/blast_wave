@@ -29,7 +29,7 @@ module Rack
       #
       # @api private
       # @since 0.1.0
-      def read(key)
+      def read(key, **options)
         raise NotImplementedError
       end
 
@@ -50,7 +50,7 @@ module Rack
       #
       # @api private
       # @since 0.1.0
-      def delete(key)
+      def delete(key, **options)
         raise NotImplementedError
       end
 
