@@ -26,7 +26,7 @@ module Rack
       #
       # @api private
       # @since 0.1.0
-      DEFAULT_INCRDECR_AMOUNT = 1
+      DEFAULT_INCR_DECR_AMOUNT = 1
 
       # @param key [String]
       # @param options [Hash]
@@ -68,7 +68,7 @@ module Rack
       #
       # @api private
       # @since 0.1.0
-      def increment(key, amount = DEFAULT_INCRDECR_AMOUNT, **options)
+      def increment(key, amount = DEFAULT_INCR_DECR_AMOUNT, **options)
         expires_in = options.fetch(:expires_in, NO_EXPIRATION_TTL)
         new_amount = nil
 
@@ -87,7 +87,7 @@ module Rack
       #
       # @api private
       # @since 0.1.0
-      def decrement(key, amount = DEFAULT_INCRDECR_AMOUNT, **options)
+      def decrement(key, amount = DEFAULT_INCR_DECR_AMOUNT, **options)
         expires_in = options.fetch(:expires_in, NO_EXPIRATION_TTL)
         new_amount = nil
 
@@ -100,12 +100,12 @@ module Rack
       end
 
       # @param key [String]
-      # @param period [Integer]
+      # @option expires_in [Integer]
       # @return [void]
       #
       # @api private
       # @since 0.1.0
-      def re_expire(key, period = NO_EXPIRATION_TTL)
+      def re_expire(key, expires_in: NO_EXPIRATION_TTL)
         expire(key, period)
       end
     end

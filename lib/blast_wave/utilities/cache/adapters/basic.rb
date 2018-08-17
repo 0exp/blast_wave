@@ -77,12 +77,12 @@ module Rack
       end
 
       # @param key [String]
-      # @param period [Integer]
+      # @option expires_in [Integer]
       # @return [void]
       #
       # @api private
       # @since 0.1.0
-      def re_expire(key, period)
+      def re_expire(key, expires_in:)
         raise NotImplementedError
       end
     end
