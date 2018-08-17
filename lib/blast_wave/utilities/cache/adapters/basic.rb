@@ -29,7 +29,7 @@ module Rack
       #
       # @api private
       # @since 0.1.0
-      def read(key, options = {})
+      def read(key, **options)
         raise NotImplementedError
       end
 
@@ -40,7 +40,7 @@ module Rack
       #
       # @api private
       # @sinc 0.1.0
-      def write(key, value, options = {})
+      def write(key, value, **options)
         raise NotImplementedError
       end
 
@@ -50,7 +50,7 @@ module Rack
       #
       # @api private
       # @since 0.1.0
-      def delete(key, options = {})
+      def delete(key, **options)
         raise NotImplementedError
       end
 
@@ -61,7 +61,18 @@ module Rack
       #
       # @api private
       # @sinc 0.1.0
-      def increment(key, value, options = {})
+      def increment(key, value, **options)
+        raise NotImplementedError
+      end
+
+      # @param key [String]
+      # @param value [Integer, Float]
+      # @param options [Hash]
+      # @return [Integer, Float]
+      #
+      # @api private
+      # @since 0.1.0
+      def decrement(key, value, **options)
         raise NotImplementedError
       end
     end
