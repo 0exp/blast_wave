@@ -10,6 +10,7 @@ module Rack
     require_relative 'adapters/redis'
     require_relative 'adapters/redis_store'
     require_relative 'adapters/active_support_file_store'
+    require_relative 'adapters/active_support_redis_cache_store'
 
     class << self
       # @param driver [Object]
@@ -29,6 +30,8 @@ module Rack
           BlastWave::Utilities::Cache::Adapters::Dalli.new(driver)
         when active_support_file_store?(driver)
           BlastWave::Utilities::Cache::Adapters::ActiveSupportFileStore.new(driver)
+        when active_support_redis_cache_store?(driver)
+          BlastWave::Utilities::Cache::Adapters::ActiveSupportRedisCacheStore.new(driver)
         when delegateable?(driver)
           BlastWave::Utilities::Cache::Adapters::Delegator.new(driver)
         else
@@ -52,6 +55,10 @@ module Rack
 
       def active_support_file_store?(driver)
         ActiveSupportFileStore.supported_driver?(driver)
+      end
+
+      def active_support_redis_cache_store?(driver)
+        ActiveSupportRedisCacheStore.supported_driver?(driver)
       end
 
       def delegateable?(driver)

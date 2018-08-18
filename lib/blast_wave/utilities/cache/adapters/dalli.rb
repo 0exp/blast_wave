@@ -16,15 +16,6 @@ module Rack
         end
       end
 
-      # @since 0.1.0
-      def_delegators :driver,
-                     :get,
-                     :set,
-                     :incr,
-                     :decr,
-                     :multi,
-                     :touch
-
       # @return [Integer]
       #
       # @api private
@@ -36,6 +27,15 @@ module Rack
       # @api private
       # @since 0.1.0
       DEFAULT_INCR_DECR_AMOUNT = 1
+
+      # @since 0.1.0
+      def_delegators :driver,
+                     :get,
+                     :set,
+                     :incr,
+                     :decr,
+                     :multi,
+                     :touch
 
       # @param key [String]
       # @param options [Hash]
