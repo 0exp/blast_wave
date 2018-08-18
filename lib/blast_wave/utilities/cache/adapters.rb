@@ -21,17 +21,41 @@ module Rack
       # @since 0.1.0
       def build(driver)
         case
-        when defined?(::Redis::Store) && driver.is_a?(::Redis::Store)
+        when redis_store?(driver)
           BlastWave::Utilities::Cache::Adapters::RedisStore.new(driver)
-        when defined?(::Redis) && driver.is_a?(::Redis)
+        when redis?(driver)
           BlastWave::Utilities::Cache::Adapters::Redis.new(driver)
-        when defined?(::Dalli::Client) && driver.is_a?(::Dalli::Client)
+        when dalli?(driver)
           BlastWave::Utilities::Cache::Adapters::Dalli.new(driver)
-        when defined?(::ActiveSupport::Cache::FileStore) && driver.is_a?(::ActiveSupport::Cache::FileStore)
+        when active_support_file_store?(driver)
           BlastWave::Utilities::Cache::Adapters::ActiveSupportFileStore.new(driver)
-        else
+        when delegateable?(driver)
           BlastWave::Utilities::Cache::Adapters::Delegator.new(driver)
+        else
+          raise BlastWave::UnsupportedDriverError
         end
+      end
+
+      private
+
+      def redis_store?(driver)
+        RedisStore.supported_driver?(driver)
+      end
+
+      def redis?(driver)
+        Redis.supported_driver?(driver)
+      end
+
+      def dalli?(driver)
+        Dalli.supported_driver?(driver)
+      end
+
+      def active_support_file_store?(driver)
+        ActiveSupportFileStore.supported_driver?(driver)
+      end
+
+      def delegateable?(driver)
+        Delegator.supported_driver?(driver)
       end
     end
   end

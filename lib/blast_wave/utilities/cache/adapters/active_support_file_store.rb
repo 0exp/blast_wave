@@ -10,6 +10,18 @@ module Rack
       require_relative 'active_support_file_store/decrement'
       require_relative 'active_support_file_store/re_expire'
 
+      class << self
+        # @param driver [Object]
+        # @return [Boolean]
+        #
+        # @api private
+        # @since 0.1.0
+        def supported_driver?(driver)
+          defined?(::ActiveSupport::Cache::FileStore) &&
+            driver.is_a?(::ActiveSupport::Cache::FileStore)
+        end
+      end
+
       # @param driver [Object]
       # @return [void]
       #
@@ -78,9 +90,28 @@ module Rack
 
       private
 
+      # @return [Concurrent::ReentrantReadWriteLock]
+      #
+      # @api private
+      # @since 0.1.0
       attr_reader :lock
+
+      # @return [Operation::Increment]
+      #
+      # @api private
+      # @since 0.1.0
       attr_reader :incr_operation
+
+      # @return [Operation::Decrement]
+      #
+      # @api private
+      # @since 0.1.0
       attr_reader :decr_operation
+
+      # @return [Operation::ReExpire]
+      #
+      # @api private
+      # @since 0.1.0
       attr_reader :rexp_operation
     end
   end

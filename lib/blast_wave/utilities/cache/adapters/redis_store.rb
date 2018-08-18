@@ -5,6 +5,17 @@ module Rack
     # @api private
     # @since 0.1.0
     class RedisStore < Redis
+      class << self
+        # @param driver [Object]
+        # @return [Boolean]
+        #
+        # @api private
+        # @since 0.1.0
+        def supported_driver?(driver)
+          defined?(::Redis::Store) && driver.is_a?(::Redis::Store)
+        end
+      end
+
       # @param key [String]
       # @param options [Hash]
       # @return [Object]

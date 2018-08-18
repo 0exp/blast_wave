@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Rack
   class BlastWave::Utilities::Cache::Adapters::ActiveSupportFileStore
     # @api private
@@ -27,7 +29,7 @@ module Rack
       # @since 0.1.0
       attr_reader :driver
 
-      # @option as_integer [TrueClass, FalseClass]
+      # @option as_integer [Boolean]
       # @return [Integer, Float]
       #
       # @api private

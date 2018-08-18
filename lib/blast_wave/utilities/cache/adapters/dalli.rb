@@ -5,6 +5,17 @@ module Rack
     # @api private
     # @since 0.1.0
     class Dalli < Basic
+      class << self
+        # @param driver [Object]
+        # @return [Boolean]
+        #
+        # @api private
+        # @since 0.1.0
+        def supported_driver?(driver)
+          defined?(::Dalli::Client) && driver.is_a?(::Dalli::Client)
+        end
+      end
+
       # @since 0.1.0
       def_delegators :driver,
                      :get,
@@ -90,4 +101,3 @@ module Rack
     end
   end
 end
-

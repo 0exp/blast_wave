@@ -8,6 +8,17 @@ module Rack
       # @since 0.1.0
       extend Forwardable
 
+      class << self
+        # @param driver [Object]
+        # @return [Boolean]
+        #
+        # @api private
+        # @since 0.1.0
+        def supported_driver?(driver)
+          false
+        end
+      end
+
       # @return [Object]
       #
       # @api private

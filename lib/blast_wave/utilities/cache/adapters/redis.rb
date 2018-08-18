@@ -5,6 +5,17 @@ module Rack
     # @api private
     # @since 0.1.0
     class Redis < Basic
+      class << self
+        # @param driver [Object]
+        # @return [Boolean]
+        #
+        # @api private
+        # @since 0.1.0
+        def supported_driver?(driver)
+          defined?(::Redis) && driver.is_a?(::Redis)
+        end
+      end
+
       # @since 0.1.0
       def_delegators :driver,
                      :get,
@@ -77,7 +88,7 @@ module Rack
           expire(key, expires_in) if expires_in
         end
 
-        new_amount && new_amount.value
+        new_amount&.value
       end
 
       # @param key [String]
@@ -96,7 +107,7 @@ module Rack
           expire(key, expires_in) if expires_in
         end
 
-        new_amount && new_amount.value
+        new_amount&.value
       end
 
       # @param key [String]
