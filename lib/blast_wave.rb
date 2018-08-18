@@ -5,6 +5,7 @@ require 'securerandom'
 require 'qonfig'
 require 'ipaddr'
 require 'concurrent/map'
+require 'concurrent/atomic/reentrant_read_write_lock'
 
 module Rack
   # @api public

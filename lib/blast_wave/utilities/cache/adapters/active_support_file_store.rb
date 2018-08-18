@@ -5,112 +5,83 @@ module Rack
     # @api private
     # @since 0.1.0
     class ActiveSupportFileStore < Delegator
-      NO_EXPIRATION_TTL = nil
+      require_relative 'active_support_file_store/operation'
+      require_relative 'active_support_file_store/increment'
+      require_relative 'active_support_file_store/decrement'
+      require_relative 'active_support_file_store/re_expire'
 
-      DEFAULT_INCR_DECR_AMOUNT = 1
-
+      # @param driver [Object]
+      # @return [void]
+      #
+      # @api private
+      # @since 0.1.0
       def initialize(driver)
         super
-        @lock = Mutex.new
+        @lock = Concurrent::ReentrantReadWriteLock.new
+        @incr_operation = Increment.new(driver)
+        @decr_operation = Decrement.new(driver)
+        @rexp_operation = ReExpire.new(driver)
       end
 
-      def increment(key, amount = DEFAULT_INCR_DECR_AMOUNT, **options)
-        expires_in = options.fetch(:expires_in, NO_EXPIRATION_TTL)
-        new_amount = nil
-
-        synchronize do
-          new_amount =
-            if expires_in
-              driver.increment(key, amount, expires_in: expires_in)
-            else
-              entry = get_entry(key)
-
-              if entry
-                entry_expiration = entry.expires_at
-                new_expiration   = entry_expiration ? (entry_expiration - calc_epoch_time) : NO_EXPIRATION_TTL
-                driver.increment(key, amount, expires_in: new_expiration)
-              end
-            end
-
-          if new_amount.nil?
-            new_amount = amount
-
-            if expires_in
-              write(key, amount, expires_in: expires_in)
-            else
-              write(key, amount)
-            end
-          end
-        end
-
-        new_amount
+      # @param key [String]
+      # @param options [Hash]
+      # @return [Object]
+      #
+      # @api private
+      # @since 0.1.0
+      def read(key, **options)
+        lock.with_read_lock { super }
       end
 
-      def decrement(key, amount = DEFAULT_INCR_DECR_AMOUNT, **options)
-        expires_in = options.fetch(:expires_in, NO_EXPIRATION_TTL)
-        new_amount = nil
-
-        synchronize do
-          new_amount =
-            if expires_in
-              driver.decrement(key, amount, expires_in: expires_in)
-            else
-              entry = get_entry(key)
-
-              if entry
-                entry_expiration = entry.expires_at
-                new_expiration   = entry_expiration ? (entry_expiration - calc_epoch_time) : NO_EXPIRATION_TTL
-                driver.decrement(key, amount, expires_in: new_expiration)
-              end
-            end
-
-          if new_amount.nil?
-            new_amount = amount
-
-            if expires_in
-              write(key, 0 - amount, expires_in: expires_in)
-            else
-              write(key, 0 - amount)
-            end
-          end
-        end
-
-        new_amount
+      # @param key [String]
+      # @param options [Hash]
+      # @return [void]
+      #
+      # @api private
+      # @since 0.1.0
+      def delete(key, **options)
+        lock.with_write_lock { super }
       end
 
-      def re_expire(key, expires_in:)
-        get_entry(key).tap do |entry|
-          write(key, entry.value, expires_in: expires_in) if entry
-        end
+      # @param key [String]
+      # @param value [Object]
+      # @param options [Hash]
+      # @return [void]
+      #
+      # @api private
+      # @since 0.1.0
+      def write(key, value, **options)
+        lock.with_write_lock { super }
+      end
+
+      # @param key [String]
+      # @param
+      def increment(key, amount = Increment::DEFAULT_AMOUNT, **options)
+        expires_in = options.fetch(:expires_in, Operation::NO_EXPIRATION_TTL)
+
+        lock.with_write_lock { incr_operation.call(key, amount, expires_in: expires_in) }
+      end
+
+      # @param key [String]
+      # @param
+      def decrement(key, amount = Decrement::DEFAULT_AMOUNT, **options)
+        expires_in = options.fetch(:expires_in, Operation::NO_EXPIRATION_TTL)
+
+        lock.with_write_lock { decr_operation.call(key, amount, expires_in: expires_in) }
+      end
+
+      # @param key [String]
+      # @param
+      def re_expire(key, expires_in: Operation::NO_EXPIRATION_TTL)
+        lock.with_write_lock { rexp_operation.call(key, expires_in: expires_in) }
       end
 
       private
 
       attr_reader :lock
-
-      def calc_epoch_time
-        Time.now.to_f
-      end
-
-      def synchronize(&block)
-        lock.synchronize { block.call }
-      end
-
-      def get_entry(key)
-        driver.instance_eval do
-          options = merged_options(nil)
-          searched_entry = nil
-
-          search_dir(cache_path) do |fname|
-            entry = read_entry(fname, options)
-            name = file_path_key(fname)
-
-            searched_entry = entry if name == key
-          end
-
-          searched_entry
-        end
-      end
+      attr_reader :incr_operation
+      attr_reader :decr_operation
+      attr_reader :rexp_operation
     end
   end
 end
