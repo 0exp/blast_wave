@@ -50,6 +50,14 @@ module Rack
       block_given? ? filters.values.each(&block) : filters.values.each
     end
 
+    # @return [Boolean]
+    #
+    # @api private
+    # @since 0.1.0
+    def empty?
+      filters.empty?
+    end
+
     private
 
     # @return [Array]
