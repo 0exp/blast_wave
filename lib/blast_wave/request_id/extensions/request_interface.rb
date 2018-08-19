@@ -11,7 +11,7 @@ module Rack
         # @api public
         # @since 0.1.0
         def request_id
-          env[REQUEST_ID_ENV_KEY]
+          env[ENVIRONMENT_KEY]
         end
       end
     end
