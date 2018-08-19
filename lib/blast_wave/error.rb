@@ -7,5 +7,5 @@ module Rack::BlastWave
   # @since 0.1.0
   CacheUtilityError = Class.new(Error)
   # @since 0.1.0
-  UnsupportedDriverError = Class.new(CacheUtilityError)
+  UnsupportedCacheDriverError = Class.new(CacheUtilityError)
 end
