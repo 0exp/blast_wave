@@ -6,6 +6,9 @@ module Rack
   class BlastWave::Utilities::Cache
     require_relative 'cache/adapters'
 
+    # @since 0.1.0
+    extend Forwardable
+
     class << self
       # @param driver [Object]
       # @return [BlastWave::Utilities::Cache]
@@ -16,6 +19,9 @@ module Rack
         new(Adapters.build(driver))
       end
     end
+
+    # @since 0.1.0
+    def_delegators :adapter, :read, :write, :increment, :decrement, :re_expire
 
     # @param adapter [BlastWave::Utilities::Cache::Adapters::Basic]
     # @return [void]
