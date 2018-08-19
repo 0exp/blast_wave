@@ -34,7 +34,7 @@ module Rack
       end
     end
 
-    # @param [Object] app
+    # @param app [Object]
     # @return [void]
     #
     # @api private
@@ -65,14 +65,14 @@ module Rack
 
     private
 
-    # @return [BlastWave::WhiteList::Auditor]
+    # @return [BlastWave::CheckList::Auditor]
     #
     # @api private
     # @since 0.1.0
     attr_reader :auditor
 
     # @param env [Hash]
-    # @return [BlastWave::WhiteList::Auditor::Result]
+    # @return [BlastWave::CheckList::Auditor::Result]
     #
     # @api private
     # @since 0.1.0
@@ -81,7 +81,7 @@ module Rack
     end
 
     # @param env [Hash]
-    # @param audit_result [BlastWave::WhiteList::Auditor::Result]
+    # @param audit_result [BlastWave::CheckList::Auditor::Result]
     # @return [void]
     #
     # @api private

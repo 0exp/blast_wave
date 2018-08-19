@@ -14,7 +14,7 @@ module Rack
     # @since 0.1.0
     ENVIRONMENT_KEY = 'rack.blastwave.black_list'
 
-    # @param [Object] app
+    # @param app [Object]
     # @return [void]
     #
     # @api private
