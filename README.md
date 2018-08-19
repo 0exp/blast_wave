@@ -20,9 +20,9 @@ require 'blast_wave'
 
 ## Usage
 
-- [Rack::BlastWave::RequestId](#rackblastwaverequestid) - provides an unique id attribute to the each request;
-- [Rack::BlastWave::WhiteList](#rackblastwavewhitelist) - a set of filters that allows requests;
-- [Rack::BlastWave::BlackList](#rackblastwaveblacklist) - a set of filters that blocks requests;
+- [Rack::BlastWave::RequestId](/docs/request_id.md) - provides an unique id attribute to the each request;
+- [Rack::BlastWave::WhiteList](/docs/white_list.md) - a set of filters that allows requests;
+- [Rack::BlastWave::BlackList](/docs/black_list.md) - a set of filters that blocks requests;
 
 ## Contributing
 
