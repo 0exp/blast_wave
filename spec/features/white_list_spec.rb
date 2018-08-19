@@ -51,11 +51,16 @@ describe 'Rack::BlastWave::WhiteList Middleware' do
     let(:app) { build_fake_rack_app(Rack::BlastWave::WhiteList) }
 
     describe 'common filters' do
-      describe 'ip addresses filter' do
-        before do
-          Rack::BlastWave::WhiteList.configure { |conf| conf.fail_response.status = 403 }
-          Rack::BlastWave::WhiteList.ip_addrs('127.0.0.1', '192.168.0.1/24')
+      before do
+        Rack::BlastWave::WhiteList.configure do |conf|
+          conf.check_all = false
+          conf.lock_requests = true
+          conf.fail_response.status = 403
         end
+      end
+
+      describe 'ip addresses filter' do
+        before { Rack::BlastWave::WhiteList.ip_addrs('127.0.0.1', '192.168.0.1/24') }
 
         after { Rack::BlastWave::WhiteList.clear! }
 
@@ -86,8 +91,61 @@ describe 'Rack::BlastWave::WhiteList Middleware' do
 
       after { Rack::BlastWave::WhiteList.clear! }
 
+      describe 'request interface' do
+        before do
+          Rack::BlastWave::WhiteList.configure { |conf| conf.check_all = false }
+
+          # NOTE: add additional filter
+          Rack::BlastWave::WhiteList.filter('root') { |request| request.path == '/' }
+        end
+
+        context 'with request locking' do
+          before { Rack::BlastWave::WhiteList.configure { |conf| conf.lock_requests = true } }
+
+          specify 'rack env request data stores filter results' do
+            # NOTE: non-locked request that was filtered by actions filter
+            make_request(:get, '/', env_opts: { 'REMOTE_ADDR' => '127.0.0.1' })
+            expect(last_request.env['rack.blastwave.white_list']).to match(
+              locked: false, triggered_filters: contain_exactly('actions', 'root')
+            )
+
+            expect(last_request.white_list_info).to match(
+              locked: false, triggered_filters: contain_exactly('actions', 'root')
+            )
+            expect(last_request.locked_by_white_list?).to eq(false)
+            expect(last_request.triggered_white_list_filters).to contain_exactly('actions', 'root')
+
+            # NOTE: non-locked request that wasnt filtered
+            make_request(:options, '/any', env_opts: { 'REMOTE_ADDR' => '127.0.0.1' })
+            expect(last_request.env['rack.blastwave.white_list']).to match(
+              locked: true, triggered_filters: []
+            )
+            expect(last_request.white_list_info).to match(
+              locked: true, triggered_filters: []
+            )
+            expect(last_request.locked_by_white_list?).to eq(true)
+            expect(last_request.triggered_white_list_filters).to eq([])
+          end
+        end
+
+        context 'without request-locking' do
+          before { Rack::BlastWave::WhiteList.configure { |conf| conf.lock_requests = false } }
+
+          specify 'stores all triggered filter names event when request locking is disabled' do
+            make_request(:options, '/any')
+
+            expect(last_request.white_list_info).to match(locked: false, triggered_filters: [])
+          end
+        end
+      end
+
       describe 'bad response configuration' do
-        before { Rack::BlastWave::WhiteList.configure { |conf| conf.check_all = false } }
+        before do
+          Rack::BlastWave::WhiteList.configure do |conf|
+            conf.check_all = false
+            conf.lock_requests = true
+          end
+        end
 
         let(:app) { build_fake_rack_app(Rack::BlastWave::WhiteList) }
 
@@ -134,7 +192,7 @@ describe 'Rack::BlastWave::WhiteList Middleware' do
         end
       end
 
-      describe 'checking' do
+      describe 'checking and locking' do
         before { Rack::BlastWave::WhiteList.configure { |conf| conf.fail_response.status = 403 } }
 
         let(:app) { build_fake_rack_app(Rack::BlastWave::WhiteList) }
@@ -143,28 +201,72 @@ describe 'Rack::BlastWave::WhiteList Middleware' do
           before { Rack::BlastWave::WhiteList.configure { |conf| conf.check_all = false } }
 
           context 'all: passed' do
-            specify 'request is allowed' do
-              make_request(:get, '/', env_opts: { 'REMOTE_ADDR' => '123.123.123.123' })
-              expect(last_response.status).to eq(200)
+            context 'with request locking' do
+              before { Rack::BlastWave::WhiteList.configure { |conf| conf.lock_requests = true } }
+
+              specify 'request is allowed' do
+                make_request(:get, '/', env_opts: { 'REMOTE_ADDR' => '123.123.123.123' })
+                expect(last_response.status).to eq(200)
+              end
+            end
+
+            context 'without request locking' do
+              before { Rack::BlastWave::WhiteList.configure { |conf| conf.lock_requests = false } }
+
+              specify 'request is allowed' do
+                make_request(:get, '/', env_opts: { 'REMOTE_ADDR' => '123.123.123.123' })
+                expect(last_response.status).to eq(200)
+              end
             end
           end
 
           context 'all: not passed' do
-            specify 'request is blocked' do
-              make_request(:head, '/', env_opts: { 'REMOTE_ADDR' => '127.0.0.1' })
-              expect(last_response.status).to eq(403)
+            context 'with request locking' do
+              before { Rack::BlastWave::WhiteList.configure { |conf| conf.lock_requests = true } }
+
+              specify 'request is blocked' do
+                make_request(:head, '/', env_opts: { 'REMOTE_ADDR' => '127.0.0.1' })
+                expect(last_response.status).to eq(403)
+              end
+            end
+
+            context 'without request locking' do
+              before { Rack::BlastWave::WhiteList.configure { |conf| conf.lock_requests = false } }
+
+              specify 'request is allowed' do
+                make_request(:head, '/', env_opts: { 'REMOTE_ADDR' => '127.0.0.1' })
+                expect(last_response.status).to eq(200)
+              end
             end
           end
 
           context 'one: passed' do
-            specify 'request is allowed' do
-              # NOTE: only the ip filter is successfully passed
-              make_request(:head, '/', env_opts: { 'REMOTE_ADDR' => '123.123.123.123' })
-              expect(last_response.status).to eq(200)
+            context 'with request locking' do
+              before { Rack::BlastWave::WhiteList.configure { |conf| conf.lock_requests = true } }
 
-              # NOTE: only the action type filter is successfully passed
-              make_request(:get, '/', env_opts: { 'REMOTE_ADDR' => '127.0.0.1' })
-              expect(last_response.status).to eq(200)
+              specify 'request is allowed' do
+                # NOTE: only the ip filter is successfully passed
+                make_request(:head, '/', env_opts: { 'REMOTE_ADDR' => '123.123.123.123' })
+                expect(last_response.status).to eq(200)
+
+                # NOTE: only the action type filter is successfully passed
+                make_request(:get, '/', env_opts: { 'REMOTE_ADDR' => '127.0.0.1' })
+                expect(last_response.status).to eq(200)
+              end
+            end
+
+            context 'without request locking' do
+              before { Rack::BlastWave::WhiteList.configure { |conf| conf.lock_requests = false } }
+
+              specify 'request is allowed' do
+                # NOTE: only the ip filter is successfully passed
+                make_request(:head, '/', env_opts: { 'REMOTE_ADDR' => '123.123.123.123' })
+                expect(last_response.status).to eq(200)
+
+                # NOTE: only the action type filter is successfully passed
+                make_request(:get, '/', env_opts: { 'REMOTE_ADDR' => '127.0.0.1' })
+                expect(last_response.status).to eq(200)
+              end
             end
           end
         end
@@ -173,28 +275,72 @@ describe 'Rack::BlastWave::WhiteList Middleware' do
           before { Rack::BlastWave::WhiteList.configure { |conf| conf.check_all = true } }
 
           context 'all: passed' do
-            specify 'request is allowed' do
-              make_request(:get, '/', env_opts: { 'REMOTE_ADDR' => '123.123.123.123' })
-              expect(last_response.status).to eq(200)
+            context 'with request locking' do
+              before { Rack::BlastWave::WhiteList.configure { |conf| conf.lock_requests = true } }
+
+              specify 'request is allowed' do
+                make_request(:get, '/', env_opts: { 'REMOTE_ADDR' => '123.123.123.123' })
+                expect(last_response.status).to eq(200)
+              end
+            end
+
+            context 'without request locking' do
+              before { Rack::BlastWave::WhiteList.configure { |conf| conf.lock_requests = false } }
+
+              specify 'request is allowed' do
+                make_request(:get, '/', env_opts: { 'REMOTE_ADDR' => '123.123.123.123' })
+                expect(last_response.status).to eq(200)
+              end
             end
           end
 
           context 'all: not passed' do
-            specify 'request is blocked' do
-              make_request(:head, '/', env_opts: { 'REMOTE_ADDR' => '127.0.0.1' })
-              expect(last_response.status).to eq(403)
+            context 'with request locking' do
+              before { Rack::BlastWave::WhiteList.configure { |conf| conf.lock_requests = true } }
+
+              specify 'request is blocked' do
+                make_request(:head, '/', env_opts: { 'REMOTE_ADDR' => '127.0.0.1' })
+                expect(last_response.status).to eq(403)
+              end
+            end
+
+            context 'without request locking' do
+              before { Rack::BlastWave::WhiteList.configure { |conf| conf.lock_requests = false } }
+
+              specify 'request is allowed' do
+                make_request(:head, '/', env_opts: { 'REMOTE_ADDR' => '127.0.0.1' })
+                expect(last_response.status).to eq(200)
+              end
             end
           end
 
           context 'one: passed' do
-            specify 'request is blocked' do
-              # NOTE: only the ip filter is successfully passed
-              make_request(:head, '/', env_opts: { 'REMOTE_ADDR' => '123.123.123.123' })
-              expect(last_response.status).to eq(403)
+            context 'with request locking' do
+              before { Rack::BlastWave::WhiteList.configure { |conf| conf.lock_requests = true } }
 
-              # NOTE: only the action type filter is successfully passed
-              make_request(:get, '/', env_opts: { 'REMOTE_ADDR' => '127.0.0.1' })
-              expect(last_response.status).to eq(403)
+              specify 'request is blocked' do
+                # NOTE: only the ip filter is successfully passed
+                make_request(:head, '/', env_opts: { 'REMOTE_ADDR' => '123.123.123.123' })
+                expect(last_response.status).to eq(403)
+
+                # NOTE: only the action type filter is successfully passed
+                make_request(:get, '/', env_opts: { 'REMOTE_ADDR' => '127.0.0.1' })
+                expect(last_response.status).to eq(403)
+              end
+            end
+
+            context 'without request locking' do
+              before { Rack::BlastWave::WhiteList.configure { |conf| conf.lock_requests = false } }
+
+              specify 'request is allowed' do
+                # NOTE: only the ip filter is successfully passed
+                make_request(:head, '/', env_opts: { 'REMOTE_ADDR' => '123.123.123.123' })
+                expect(last_response.status).to eq(200)
+
+                # NOTE: only the action type filter is successfully passed
+                make_request(:get, '/', env_opts: { 'REMOTE_ADDR' => '127.0.0.1' })
+                expect(last_response.status).to eq(200)
+              end
             end
           end
         end
