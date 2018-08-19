@@ -19,7 +19,7 @@ module Rack
         # @since 0.1.0
         def supported_driver?(driver)
           defined?(::ActiveSupport::Cache::MemoryStore) &&
-            driver.is_a?(::ActiveSupport::Cache::MemoryStore)
+          driver.is_a?(::ActiveSupport::Cache::MemoryStore)
         end
       end
     end

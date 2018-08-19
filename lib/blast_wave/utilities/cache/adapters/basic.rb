@@ -96,6 +96,15 @@ module Rack
       def re_expire(key, expires_in:)
         raise NotImplementedError
       end
+
+      # @param options [Hash]
+      # @return [void]
+      #
+      # @api private
+      # @since 0.1.0
+      def clear(**options)
+        raise NotImplementedError
+      end
     end
   end
 end

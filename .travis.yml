@@ -10,6 +10,102 @@ matrix:
     - rvm: 2.5.1
     - rvm: ruby-head
     - rvm: jruby-head
+
+    - rvm: 2.3.7
+      gemfile: gemfiles/active_support.gemfile
+      env: TEST_AS_MEMORY_STORE_CACHE
+    - rvm: 2.4.4
+      gemfile: gemfiles/active_support.gemfile
+      env: TEST_AS_MEMORY_STORE_CACHE
+    - rvm: 2.5.1
+      gemfile: gemfiles/active_support.gemfile
+      env: TEST_AS_MEMORY_STORE_CACHE
+    - rvm: ruby-head
+      gemfile: gemfiles/active_support.gemfile
+      env: TEST_AS_MEMORY_STORE_CACHE
+    - rvm: jruby-head
+      gemfile: gemfiles/active_support.gemfile
+      env: TEST_AS_MEMORY_STORE_CACHE
+
+    - rvm: 2.3.7
+      gemfile: gemfiles/active_support.gemfile
+      env: TEST_AS_FILE_STORE_CACHE
+    - rvm: 2.4.4
+      gemfile: gemfiles/active_support.gemfile
+      env: TEST_AS_FILE_STORE_CACHE
+    - rvm: 2.5.1
+      gemfile: gemfiles/active_support.gemfile
+      env: TEST_AS_FILE_STORE_CACHE
+    - rvm: ruby-head
+      gemfile: gemfiles/active_support.gemfile
+      env: TEST_AS_FILE_STORE_CACHE
+    - rvm: jruby-head
+      gemfile: gemfiles/active_support.gemfile
+      env: TEST_AS_FILE_STORE_CACHE
+
+    - rvm: 2.3.7
+      gemfile: gemfiles/active_support_with_redis.gemfile
+      env: TEST_AS_REDIS_CACHE_STORE_CACHE
+    - rvm: 2.4.4
+      gemfile: gemfiles/active_support_with_redis.gemfile
+      env: TEST_AS_REDIS_CACHE_STORE_CACHE
+    - rvm: 2.5.1
+      gemfile: gemfiles/active_support_with_redis.gemfile
+      env: TEST_AS_REDIS_CACHE_STORE_CACHE
+    - rvm: ruby-head
+      gemfile: gemfiles/active_support_with_redis.gemfile
+      env: TEST_AS_REDIS_CACHE_STORE_CACHE
+    - rvm: jruby-head
+      gemfile: gemfiles/active_support_with_redis.gemfile
+      env: TEST_AS_REDIS_CACHE_STORE_CACHE
+
+    - rvm: 2.3.7
+      gemfile: gemfiles/dalli.gemfile
+      env: TEST_DALLI_CACHE
+    - rvm: 2.4.4
+      gemfile: gemfiles/dalli.gemfile
+      env: TEST_DALLI_CACHE
+    - rvm: 2.5.1
+      gemfile: gemfiles/dalli.gemfile
+      env: TEST_DALLI_CACHE
+    - rvm: ruby-head
+      gemfile: gemfiles/dalli.gemfile
+      env: TEST_DALLI_CACHE
+    - rvm: jruby-head
+      gemfile: gemfiles/dalli.gemfile
+      env: TEST_DALLI_CACHE
+
+    - rvm: 2.3.7
+      gemfile: gemfiles/redis_store.gemfile
+      env: TEST_REDIS_STORE_CACHE
+    - rvm: 2.4.4
+      gemfile: gemfiles/redis_store.gemfile
+      env: TEST_REDIS_STORE_CACHE
+    - rvm: 2.5.1
+      gemfile: gemfiles/redis_store.gemfile
+      env: TEST_REDIS_STORE_CACHE
+    - rvm: ruby-head
+      gemfile: gemfiles/redis_store.gemfile
+      env: TEST_REDIS_STORE_CACHE
+    - rvm: jruby-head
+      gemfile: gemfiles/redis_store.gemfile
+      env: TEST_REDIS_STORE_CACHE
+
+    - rvm: 2.3.7
+      gemfile: gemfiles/redis_store.gemfile
+      env: TEST_REDIS_CACHE
+    - rvm: 2.4.4
+      gemfile: gemfiles/redis_store.gemfile
+      env: TEST_REDIS_CACHE
+    - rvm: 2.5.1
+      gemfile: gemfiles/redis_store.gemfile
+      env: TEST_REDIS_CACHE
+    - rvm: ruby-head
+      gemfile: gemfiles/redis_store.gemfile
+      env: TEST_REDIS_CACHE
+    - rvm: jruby-head
+      gemfile: gemfiles/redis_store.gemfile
+      env: TEST_REDIS_CACHE
   allow_failures:
     - rvm: ruby-head
     - rvm: jruby-head

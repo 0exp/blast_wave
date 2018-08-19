@@ -21,7 +21,7 @@ module Rack
     end
 
     # @since 0.1.0
-    def_delegators :adapter, :read, :write, :increment, :decrement, :re_expire
+    def_delegators :adapter, :read, :write, :delete, :increment, :decrement, :re_expire, :clear
 
     # @param adapter [BlastWave::Utilities::Cache::Adapters::Basic]
     # @return [void]

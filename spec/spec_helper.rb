@@ -15,10 +15,10 @@ require 'blast_wave'
 require 'rack/test'
 require 'pry'
 
-require_relative 'support/fake_app'
-require_relative 'support/request_helpers'
+require_relative 'support/spec_support'
 
 RSpec.configure do |config|
+  config.filter_run_when_matching :focus
   config.shared_context_metadata_behavior = :apply_to_host_groups
   config.expect_with(:rspec) { |c| c.syntax = :expect }
   config.order = :random

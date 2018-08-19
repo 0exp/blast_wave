@@ -37,7 +37,8 @@ module Rack
                      :incrby,
                      :decrby,
                      :pipelined,
-                     :expire
+                     :expire,
+                     :flushdb
 
       # @param key [String]
       # @param options [Hash]
@@ -118,6 +119,15 @@ module Rack
       # @since 0.1.0
       def re_expire(key, expires_in: NO_EXPIRATION_TTL)
         expire(key, expires_in)
+      end
+
+      # @param options [Hash]
+      # @return [void]
+      #
+      # @api private
+      # @since 0.1.0
+      def clear(**options)
+        flushdb
       end
     end
   end

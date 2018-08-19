@@ -43,6 +43,15 @@ module Rack
         lock.with_write_lock { super }
       end
 
+      # @param options [Hash]
+      # @return [void]
+      #
+      # @api private
+      # @since 0.1.0
+      def clear(**options)
+        lock.with_write_lock { super }
+      end
+
       # @param key [String]
       # @param value [Object]
       # @param options [Hash]

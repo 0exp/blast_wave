@@ -12,13 +12,14 @@ module Rack
         # @api private
         # @since 0.1.0
         def supported_driver?(driver)
+          defined?(::Redis) &&
           defined?(::ActiveSupport::Cache::RedisCacheStore) &&
-            driver.is_a?(::ActiveSupport::Cache::RedisCacheStore)
+          driver.is_a?(::ActiveSupport::Cache::RedisCacheStore)
         end
       end
 
       # @since 0.1.0
-      def_delegators :driver, :delete
+      def_delegators :driver, :delete, :clear
 
       # @return [NilClass]
       #
@@ -69,7 +70,9 @@ module Rack
         if is_initial
           write(key, amount, expires_in: expires_in) && amount
         else
-          driver.increment(key, amount)
+          driver.increment(key, amount).tap do
+            driver.redis.expire(key, expires_in) if expires_in
+          end
         end
       end
 
@@ -87,7 +90,9 @@ module Rack
         if is_initial
           write(key, -amount, expires_in: expires_in) && -amount
         else
-          driver.decrement(key, amount)
+          driver.decrement(key, amount).tap do
+            driver.redis.expire(key, expires_in) if expires_in
+          end
         end
       end
 

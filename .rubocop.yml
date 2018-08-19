@@ -13,3 +13,6 @@ AllCops:
     - Gemfile
     - Rakefile
     - blast_wave.gemspec
+
+Layout/MultilineOperationIndentation:
+  Enabled: false

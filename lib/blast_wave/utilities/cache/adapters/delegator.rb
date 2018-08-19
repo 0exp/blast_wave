@@ -13,11 +13,12 @@ module Rack
         # @since 0.1.0
         def supported_driver?(driver)
           driver.respond_to?(:read) &&
-            driver.respond_to?(:write) &&
-            driver.respond_to?(:delete) &&
-            driver.respond_to?(:increment) &&
-            driver.respond_to?(:decrement) &&
-            driver.respond_to?(:re_expire)
+          driver.respond_to?(:write) &&
+          driver.respond_to?(:delete) &&
+          driver.respond_to?(:increment) &&
+          driver.respond_to?(:decrement) &&
+          driver.respond_to?(:re_expire) &&
+          driver.respond_to?(:clear)
         end
       end
 
@@ -28,7 +29,8 @@ module Rack
                      :delete,
                      :increment,
                      :decrement,
-                     :re_expire
+                     :re_expire,
+                     :clear
     end
   end
 end

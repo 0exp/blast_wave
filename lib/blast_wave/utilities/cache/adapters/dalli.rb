@@ -28,6 +28,12 @@ module Rack
       # @since 0.1.0
       DEFAULT_INCR_DECR_AMOUNT = 1
 
+      # @return [Integer]
+      #
+      # @api private
+      # @since 0.1.0
+      MIN_DECRESEAD_VAL = 0
+
       # @since 0.1.0
       def_delegators :driver,
                      :get,
@@ -35,7 +41,8 @@ module Rack
                      :incr,
                      :decr,
                      :multi,
-                     :touch
+                     :touch,
+                     :flush
 
       # @param key [String]
       # @param options [Hash]
@@ -73,7 +80,10 @@ module Rack
       def increment(key, amount = DEFAULT_INCR_DECR_AMOUNT, **options)
         expires_in = options.fetch(:expires_in, NO_EXPIRATION_TTL)
 
-        incr(key, amount, expires_in, amount)
+        # TODO: think about #cas and Concurrent::ReentrantReadWriteLock
+        incr(key, amount, expires_in, amount).tap do |new_amount|
+          touch(key, expires_in) if new_amount && expires_in.positive?
+        end
       end
 
       # @param key [String]
@@ -86,7 +96,10 @@ module Rack
       def decrement(key, amount = DEFAULT_INCR_DECR_AMOUNT, **options)
         expires_in = options.fetch(:expires_in, NO_EXPIRATION_TTL)
 
-        decr(key, amount, expires_in, amount)
+        # TODO: think about #cas and Concurrent::ReentrantReadWriteLock
+        decr(key, amount, expires_in, MIN_DECRESEAD_VAL).tap do |new_amount|
+          touch(key, expires_in) if new_amount && expires_in.positive?
+        end
       end
 
       # @param key [String]
@@ -97,6 +110,15 @@ module Rack
       # @since 0.1.0
       def re_expire(key, expires_in: NO_EXPIRATION_TTL)
         touch(key, expires_in)
+      end
+
+      # @param options [Hash]
+      # @return [void]
+      #
+      # @api private
+      # @since 0.1.0
+      def clear(**options)
+        flush(0) # NOTE: 0 is a flush delay
       end
     end
   end
