@@ -23,12 +23,12 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency 'rack',            '~> 2.0'
-  spec.add_dependency 'qonfig',          '~> 0.5'
+  spec.add_dependency 'qonfig',          '~> 0.9'
   spec.add_dependency 'concurrent-ruby', '~> 1.0'
 
   spec.add_development_dependency 'coveralls',        '~> 0.8'
   spec.add_development_dependency 'simplecov',        '~> 0.16'
-  spec.add_development_dependency 'armitage-rubocop', '~> 0.6'
+  spec.add_development_dependency 'armitage-rubocop', '~> 0.18'
   spec.add_development_dependency 'rspec',            '~> 3.8'
   spec.add_development_dependency 'rack-test',        '~> 1.1'
 
